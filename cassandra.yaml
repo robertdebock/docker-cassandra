@@ -134,7 +134,6 @@ batchlog_replay_throttle: 1024KiB
 #   users. It keeps usernames and hashed passwords in system_auth.roles table.
 #   Please increase system_auth keyspace replication factor if you use this authenticator.
 #   If using PasswordAuthenticator, CassandraRoleManager must also be used (see below)
-# 2023-02-16: Robert changed to PasswordAuthentictor (https://hopding.com/cassandra-authentication-in-docker-container)
 # authenticator: AllowAllAuthenticator
 authenticator: PasswordAuthenticator
 
@@ -145,7 +144,6 @@ authenticator: PasswordAuthenticator
 # - AllowAllAuthorizer allows any action to any user - set it to disable authorization.
 # - CassandraAuthorizer stores permissions in system_auth.role_permissions table. Please
 #   increase system_auth keyspace replication factor if you use this authorizer.
-# 2023-02-16: Robert changed to CassandraAuthorizer.
 # authorizer: AllowAllAuthorizer
 authorizer: CassandraAuthorizer
 
@@ -804,7 +802,7 @@ native_transport_port: 9042
 # for native_transport_port. Setting native_transport_port_ssl to a different value
 # from native_transport_port will use encryption for native_transport_port_ssl while
 # keeping native_transport_port unencrypted.
-# native_transport_port_ssl: 9142
+native_transport_port_ssl: 9142
 # The maximum threads for handling requests (note that idle threads are stopped
 # after 30 seconds so there is not corresponding minimum setting).
 # native_transport_max_threads: 128
@@ -1321,12 +1319,12 @@ server_encryption_options:
   # during upgrade to 4.0; otherwise, set to false.
   legacy_ssl_storage_port_enabled: false
   # Set to a valid keystore if internode_encryption is dc, rack or all
-  keystore: conf/.keystore
+  keystore: /etc/cassandra/conf/certs/cassandra.keystore
   keystore_password: cassandra
   # Verify peer server certificates
   require_client_auth: false
   # Set to a valid trustore if require_client_auth is true
-  truststore: conf/.truststore
+  truststore: /etc/cassandra/conf/certs/cassandra.truststore
   truststore_password: cassandra
   # Verify that the host name in the certificate matches the connected host
   require_endpoint_verification: false
@@ -1354,13 +1352,13 @@ server_encryption_options:
 # auth set require_client_auth=true. Restart all nodes
 client_encryption_options:
   # Enable client-to-server encryption
-  enabled: false
+  enabled: true
   # When set to true, encrypted and unencrypted connections are allowed on the native_transport_port
   # This should _only be true_ while in unencrypted or transitional operation
   # optional defaults to true when enabled is false, and false when enabled is true.
-  # optional: true
+  optional: true
   # Set keystore and keystore_password to valid keystores if enabled is true
-  keystore: conf/.keystore
+  keystore: /etc/cassandra/conf/certs/cassandra.keystore
   keystore_password: cassandra
   # Verify client certificates
   require_client_auth: false
@@ -1368,7 +1366,7 @@ client_encryption_options:
   # truststore: conf/.truststore
   # truststore_password: cassandra
   # More advanced defaults:
-  # protocol: TLS
+  protocol: TLS
   # store_type: JKS
   # cipher_suites: [
   #   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
