@@ -168,7 +168,7 @@ role_manager: CassandraRoleManager
 # - AllowAllNetworkAuthorizer allows access to any DC to any user - set it to disable authorization.
 # - CassandraNetworkAuthorizer stores permissions in system_auth.network_permissions table. Please
 #   increase system_auth keyspace replication factor if you use this authorizer.
-network_authorizer: AllowAllNetworkAuthorizer
+network_authorizer: CassandraNetworkAuthorizer
 
 # Depending on the auth strategy of the cluster, it can be beneficial to iterate
 # from root to table (root -> ks -> table) instead of table to root (table -> ks -> root).
